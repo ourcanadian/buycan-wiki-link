@@ -2,48 +2,39 @@
 import praw
 import re
 import os
+from datetime import datetime, timedelta
+
+def log(msg):
+    SLACK_URL = os.environ['SLACK_URL']
+    command = os.popen('''curl -X POST -H 'Content-type: application/json' --data '{"text":"'''+msg+'''"}' '''+SLACK_URL)
+    print(command.read())
+    print(command.close())
+
 
 def main():
-    # Create the Reddit instance
-
+    # Create the Reddit instance and login using ./praw.ini data
     reddit = praw.Reddit('wikireplier')
 
-    # and login
-    #reddit.login(REDDIT_USERNAME, REDDIT_PASS)
+    # get current time and correct for how far back we want to look
+    _now = datetime.now()
+    _x_time_ago = _now - timedelta(minutes=30)
 
-    if not os.path.isfile("posts_replied_to.txt"):
-        posts_replied_to = []
+    # convert UTC time to a float for comparison
+    read_upto_time = _x_time_ago.timestamp()
 
-    # If we have run the code before, load the list of posts we have replied to
-    else:
-        # Read the file into a list and remove any empty values
-        with open("posts_replied_to.txt", "r") as f:
-            posts_replied_to = f.read()
-            posts_replied_to = posts_replied_to.split("\n")
-            posts_replied_to = list(filter(None, posts_replied_to))
-
-    # Get the top 5 values from our subreddit
-    subreddit = reddit.subreddit('Optimistic_Orca')
-    for submission in subreddit.hot(limit=10):
-        #print(submission.title)
-
-        if submission.id not in posts_replied_to:
-
-
-            # Do a case insensitive search
-            if re.search("test", submission.title, re.IGNORECASE):
-                # Reply to the post
-                submission.reply("I love buying local!")
-                print("Bot replying to : ", submission.title, "["+str(submission.id)+"]")
-
-                # Store the current id into our list
-                posts_replied_to.append(submission.id)
-                break
-
-    # Write our updated list back to the file
-    with open("posts_replied_to.txt", "w") as f:
-        for post_id in posts_replied_to:
-            f.write(post_id + "\n")
+    # Get the top 10 values from our subreddit
+    subreddit = reddit.subreddit('BuyCanadian')
+    for submission in subreddit.new(limit=20):
+        created_time = submission.created_utc        
+        # any post in the past X time will be read
+        if created_time > read_upto_time:
+            # Read link from post and determine if its external
+            link = submission.url
+            if("reddit" not in link):
+                log("/u/"+str(submission.author)+" posted "+link)
+                log("Check it out here "+submission.permalink)
+        else:
+            break
 
 if __name__ == "__main__":
     main()
