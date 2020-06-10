@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import praw
 import re
 import os
@@ -16,6 +15,7 @@ def log(msg, local):
 
 
 def main(minu, local=False):
+    count = 0
     # Create the Reddit instance and login using ./praw.ini data
     reddit = praw.Reddit('wikireplier')
 
@@ -29,6 +29,7 @@ def main(minu, local=False):
     # Get the top 20 values from our subreddit
     subreddit = reddit.subreddit('BuyCanadian')
     for submission in subreddit.new(limit=20):
+        count += 1
         created_time = submission.created_utc        
         # any post in the past X time will be read
         if created_time > read_upto_time:
