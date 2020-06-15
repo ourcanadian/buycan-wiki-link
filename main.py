@@ -16,7 +16,7 @@ def log(msg, local):
 
 def main(minu, local=False):
     count = 0
-    # Create the Reddit instance and login using ./praw.ini data
+    # Create the Reddit instance and login using ./praw.ini or ~/.config/praw.ini
     reddit = praw.Reddit('wikireplier')
 
     # get current time and correct for how far back we want to look
@@ -41,6 +41,15 @@ def main(minu, local=False):
             break
 
 if __name__ == "__main__":
+    '''
+    Call via: 
+        python3 main.py
+    To get last 30 minutes by default.
+
+    Or set custom time (e.g. 2 hours)
+        python3 main.py 120
+    '''
+    
     called = False
     if(len(sys.argv) > 1):
         local = False
