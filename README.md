@@ -18,7 +18,7 @@ pip3 install -r requirements.txt
 
 In order to get to the good stuff, you will need the API Token and login info, which are kept private to prevent security risks. These things are only ever stored in local `praw.ini` files. Request the `praw.ini` content from an admin or via rylancole@ourcanadian.ca. Once you have the content, create a `praw.ini` file in the `wiki-replier/` directory, and don't worry `.gitignore` will make sure you don't push the `praw.ini` file up to github. That would be trouble.
 
-Now you can run the bot from within the directory and it will fetch posts from the last 30 minutes.
+Now you can run the bot from within the directory and it will fetch posts from the last 30 minutes, up to 20 posts.
 ```
 python3 main.py
 ```
@@ -26,4 +26,9 @@ python3 main.py
 You can customize the amount of time it goes back with an argument. (e.g. 2 hours)
 ``` 
 python3 main.py 120
+```
+
+You can customize the limit to how many posts it fetches with a second argument. (e.g. 24 hours, 100 posts)
+``` 
+python3 main.py 1440 100
 ```
