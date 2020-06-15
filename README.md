@@ -32,3 +32,9 @@ You can customize the limit to how many posts it fetches with a second argument.
 ``` 
 python3 main.py 1440 100
 ```
+
+---
+
+## How does the bot message slack?
+
+It won't from your local instance unless you have a Slack web hook saved as an eviroment variable named `BCWB_SLACK_URL`
