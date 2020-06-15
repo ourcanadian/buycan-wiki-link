@@ -4,17 +4,15 @@ import os
 import sys
 from datetime import datetime, timedelta
 
-def log(msg, local):
-    if(local):
-        print(msg)
-    else: 
-        SLACK_URL = os.environ['SLACK_URL']
+def log(msg):
+    if('BCWB_SLACK_URL' in os.environ.keys()): 
+        SLACK_URL = os.environ['BCWB_SLACK_URL']
         command = os.popen('''curl -X POST -H 'Content-type: application/json' --data '{"text":"'''+msg+'''"}' '''+SLACK_URL)
         print(command.read())
         print(command.close())
 
 
-def main(minu, local=False):
+def main(minu, lim):
     count = 0
     # Create the Reddit instance and login using ./praw.ini or ~/.config/praw.ini
     reddit = praw.Reddit('wikireplier')
@@ -28,17 +26,16 @@ def main(minu, local=False):
 
     # Get the top 20 values from our subreddit
     subreddit = reddit.subreddit('BuyCanadian')
-    for submission in subreddit.new(limit=20):
+    for submission in subreddit.new(limit=lim):
         count += 1
         created_time = submission.created_utc        
         # any post in the past X time will be read
         if created_time > read_upto_time:
-            # Read link from post and determine if its external
-            link = submission.url
-            if("reddit" not in link):
-                log("/u/"+str(submission.author)+" posted "+link+", check it out <https://www.reddit.com"+submission.permalink+"|here>", local)
+            log("/u/"+str(submission.author)+" posted <https://www.reddit.com"+submission.permalink+"|"+submission.title+">")
         else:
             break
+
+    print("Found", count, "posts from the last", minu, "minutes.")
 
 if __name__ == "__main__":
     '''
@@ -49,16 +46,10 @@ if __name__ == "__main__":
     Or set custom time (e.g. 2 hours)
         python3 main.py 120
     '''
-    
-    called = False
-    if(len(sys.argv) > 1):
-        local = False
-        for comm in sys.argv[1:]:
-            if comm in ['-l', '--local']:
-                local = True
-            elif re.match('\d+', comm):
-                main(int(comm), local)
-                called = True
 
-    if not called:
-        main(30, False)
+    if(len(sys.argv) > 2):
+        main(int(sys.argv[1]), int(sys.argv[2]))
+    elif(len(sys.argv) > 1):
+        main(int(sys.argv[1]), 20)
+    else:
+        main(30, 20)
