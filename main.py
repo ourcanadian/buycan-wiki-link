@@ -4,13 +4,17 @@ import os
 import sys
 from datetime import datetime, timedelta
 
-def log(msg):
+def slackify(submission):
+    return "/u/"+str(submission.author)+" posted <https://www.reddit.com"+submission.permalink+"|"+submission.title+">"
+
+def postPrint(submission):
     if('BCWB_SLACK_URL' in os.environ.keys()): 
         SLACK_URL = os.environ['BCWB_SLACK_URL']
-        command = os.popen('''curl -X POST -H 'Content-type: application/json' --data '{"text":"'''+msg+'''"}' '''+SLACK_URL)
+        command = os.popen('''curl -X POST -H 'Content-type: application/json' --data '{"text":"'''+slackify(submission)+'''"}' '''+SLACK_URL)
         print(command.read())
         print(command.close())
-
+    else:
+        print("/u/"+str(submission.author)+" posted \'"+submission.title+"\'")
 
 def main(minu, lim):
     count = 0
@@ -31,11 +35,11 @@ def main(minu, lim):
         created_time = submission.created_utc        
         # any post in the past X time will be read
         if created_time > read_upto_time:
-            log("/u/"+str(submission.author)+" posted <https://www.reddit.com"+submission.permalink+"|"+submission.title+">")
+            postPrint(submission)
         else:
             break
 
-    print("Found", count, "posts from the last", minu, "minutes.")
+    print("\nFound", count, "posts from the last", minu, "minutes.")
 
 if __name__ == "__main__":
     '''
