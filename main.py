@@ -4,6 +4,15 @@ import os
 import sys
 from datetime import datetime, timedelta
 
+'''
+    Call via: 
+        python3 main.py
+    To get last 30 minutes by default.
+
+    Or set custom time (e.g. 2 hours)
+        python3 main.py 120
+'''
+
 def slackify(submission):
     return "/u/"+str(submission.author)+" posted <https://www.reddit.com"+submission.permalink+"|"+submission.title+">"
 
@@ -42,15 +51,6 @@ def main(minu, lim):
     print("\nFound", count, "posts from the last", minu, "minutes.")
 
 if __name__ == "__main__":
-    '''
-    Call via: 
-        python3 main.py
-    To get last 30 minutes by default.
-
-    Or set custom time (e.g. 2 hours)
-        python3 main.py 120
-    '''
-
     if(len(sys.argv) > 2):
         main(int(sys.argv[1]), int(sys.argv[2]))
     elif(len(sys.argv) > 1):
