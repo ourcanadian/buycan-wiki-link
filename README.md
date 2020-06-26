@@ -1,4 +1,4 @@
-# Buy Canadian Wiki Bot (wiki-replier)
+# Buy Canadian Wiki Linker (buycan-wiki-link)
 
 
 This is a Reddit bot that replies to [/r/BuyCanadian](https://www.reddit.com/r/BuyCanadian/) posts with relevant pages and info from [OurCanadianWiki](https://wiki.ourcanadian.ca/)
@@ -7,16 +7,16 @@ To install and run the Wiki-Replier you need have [git](https://git-scm.com/down
 
 Open your command terminal in the directory in which you would like to Ocwa and clone the repo.
 ```
-git clone https://github.com/ourcanadian/wiki-replier.git
+git clone https://github.com/ourcanadian/buycan-wiki-link.git
 ```
 
 Enter the repo and install the neccassary libraries.
 ```
-cd wiki-replier
+cd buycan-wiki-link
 pip3 install -r requirements.txt
 ```
 
-In order to get to the good stuff, you will need the API Token and login info, which are kept private to prevent security risks. These things are only ever stored in local `praw.ini` files. Request the `praw.ini` content from an admin or via rylancole@ourcanadian.ca. Once you have the content, create a `praw.ini` file in the `wiki-replier/` directory, and don't worry `.gitignore` will make sure you don't push the `praw.ini` file up to github. That would be trouble.
+In order to get to the good stuff, you will need the API Token and login info, which are kept private to prevent security risks. These things are only ever stored in local `praw.ini` files. Request the `praw.ini` content from an admin or via rylancole@ourcanadian.ca. Once you have the content, create a `praw.ini` file in the `buycan-wiki-link/` directory, and don't worry `.gitignore` will make sure you don't push the `praw.ini` file up to github. That would be trouble.
 
 Now you can run the bot from within the directory and it will fetch posts from the last 30 minutes, up to 20 posts.
 ```
