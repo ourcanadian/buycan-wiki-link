@@ -1,4 +1,4 @@
-# Buy Canadian Wiki Linker (buycan-wiki-link)
+# /r/BuyCanadian Wiki Link Bot (buycan-wiki-link)
 
 
 This is a Reddit bot that replies to [/r/BuyCanadian](https://www.reddit.com/r/BuyCanadian/) posts with relevant pages and info from [OurCanadianWiki](https://wiki.ourcanadian.ca/)
